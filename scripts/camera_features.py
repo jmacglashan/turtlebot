@@ -28,26 +28,32 @@ class CameraFeatures:
 
 			conv = cv2.cvtColor(cv_image, cv2.COLOR_BGR2YCR_CB)
 
-			height, width, channels = img.shape
-			distImg = np.zeros((height,width,1), np.uint8)
-
-			tcb = trc = 128
-			for i in xrange(width):
-				for j in xrange(height):
-					dcr = conv[j,i,1] - tcr
-					dcr = dcr*dcr
-					dcb = conv[j,i,2] - tcb
-					dcb = dcb*dcb
-					dist = int(math.sqrt(dcr + dcb))
-					distImg[j,i 0] = dist
-
-			cv2.imwrite('targetCol.jpg', distImg)
-
+			di = self.distImage(conv, (-1, 128, 128))
+			cv2.imwrite('bdist.jpg', di)
 
 			#cv2.imwrite('extract.jpg', cv_image)
 			#cv2.imwrite('extractconv.jpg', conv)
-			#self.nPrints -= 1
-			#print 'finished writing'
+			
+			self.nPrints -= 1
+			print 'finished writing'
+
+	def distImage(self, img, targetCol):
+		height, width, channels = img.shape
+		distImg = np.zeros((height,width,1), np.uint8)
+		for i in xrange(width):
+				for j in xrange(height):
+					distImg[j,i,0] = self.colDist(img[j,i], targetCol
+		return distImg
+
+	def colDist(self, col, targetCol):
+			sum = 0
+			for i in xrange(length(col)):
+				if targetCol[i] >= 0:
+					d = targetCol[i] - col[i]
+					sum += d*d
+			dist = int(math.sqrt(sum))
+			return dist
+
 
 
 if __name__ == '__main__':
