@@ -53,7 +53,7 @@ class CameraFeatures:
 		sqrtImg = np.sqrt(ssqImg)
 		dImg = sqrtImg.astype(np.uint8)
 		print np.min(sqrtImg), np.max(sqrtImg)
-		print np.max(dImg), np.max(dImg)
+		print np.min(dImg), np.max(dImg)
 		return dImg
 
 	
