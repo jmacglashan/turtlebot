@@ -30,6 +30,11 @@ class CameraFeatures:
 			conv = cv2.cvtColor(cv_image, cv2.COLOR_BGR2YCR_CB)
 			print 'getting dist image'
 
+			y, cr, cb = cv2.split(conv)
+			cv2.imwrite('y.jpg', y)
+			cv2.imwrite('cr.jpg', cr)
+			cv2.imwrite('cb.jpg', cb)
+
 			di = self.distImage(conv, (100, 255, 64))
 			print 'writing dist image'
 			cv2.imwrite('bdist.jpg', di)
@@ -51,9 +56,7 @@ class CameraFeatures:
 		ssqImg = y + cr + cb
 		sqrtImg = np.sqrt(ssqImg)
 		dImg = sqrtImg.astype(np.uint8)
-		cv2.imwrite('y.jpg', y)
-		cv2.imwrite('cr.jpg', cr)
-		cv2.imwrite('cb.jpg', cb)
+		
 
 		return dImg
 
