@@ -42,20 +42,16 @@ class CameraFeatures:
 
 	def distImage(self, img, targetCol):
 		height, width, channels = img.shape
-		distImg = np.zeros((height,width,1), np.uint8)
-		for i in xrange(width):
-				for j in xrange(height):
-					distImg[j,i,0] = self.colDist(img[j,i], targetCol)
-		return distImg
+		tImg = np.zeros((height,width,3), np.int)
+		tImg[:,:] = targetCol
+		sImg = img.asType(np.int) - tImg
+		sqImg = np.square(sImg)
+		y, cr, cb = cv2.split(sqImg)
+		ssqImg = y + cr + cb
+		dImg = np.sqrt(ssqImg).asType(np.uint8)
+		return dImg
 
-	def colDist(self, col, targetCol):
-			sum = 0
-			for i in xrange(len(col)):
-				if targetCol[i] >= 0:
-					d = targetCol[i] - col[i]
-					sum += d*d
-			dist = 255 - int(math.sqrt(sum))
-			return dist
+	
 
 
 
