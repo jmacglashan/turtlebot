@@ -47,7 +47,7 @@ class CameraFeatures:
 
 	def colDist(self, col, targetCol):
 			sum = 0
-			for i in xrange(length(col)):
+			for i in xrange(len(col)):
 				if targetCol[i] >= 0:
 					d = targetCol[i] - col[i]
 					sum += d*d
