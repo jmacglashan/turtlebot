@@ -44,11 +44,11 @@ class CameraFeatures:
 		height, width, channels = img.shape
 		tImg = np.zeros((height,width,3), np.int)
 		tImg[:,:] = targetCol
-		sImg = img.asType(np.int) - tImg
+		sImg = img.astype(np.int) - tImg
 		sqImg = np.square(sImg)
 		y, cr, cb = cv2.split(sqImg)
 		ssqImg = y + cr + cb
-		dImg = np.sqrt(ssqImg).asType(np.uint8)
+		dImg = np.sqrt(ssqImg).astype(np.uint8)
 		return dImg
 
 	
