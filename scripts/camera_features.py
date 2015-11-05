@@ -35,7 +35,7 @@ class CameraFeatures:
 			cv2.imwrite('cr.jpg', cr)
 			cv2.imwrite('cb.jpg', cb)
 
-			di = self.distImage(conv, (100, 255, 64))
+			di = self.distImage(conv, (100, 255, 64), (1,0,0))
 			print 'writing dist image'
 			cv2.imwrite('bdist.jpg', di)
 			cv2.imwrite('extract.jpg', cv_image)
@@ -46,7 +46,14 @@ class CameraFeatures:
 			self.nPrints -= 1
 			print 'finished writing'
 
-	def distImage(self, img, targetCol):
+	def distImage(self, img, targetCol, mask=(0, 0, 0)):
+		if mask[0] == 1:
+			img[:,:,0] = 0
+		if mask[1] == 1:
+			img[:,:,1] = 0
+		if mask[2] == 1:
+			img[:,:,2] = 0
+
 		height, width, channels = img.shape
 		tImg = np.zeros((height,width,3), np.int)
 		tImg[:,:] = targetCol
