@@ -42,7 +42,7 @@ class CameraFeatures:
 		distImg = np.zeros((height,width,1), np.uint8)
 		for i in xrange(width):
 				for j in xrange(height):
-					distImg[j,i,0] = self.colDist(img[j,i], targetCol
+					distImg[j,i,0] = self.colDist(img[j,i], targetCol)
 		return distImg
 
 	def colDist(self, col, targetCol):
