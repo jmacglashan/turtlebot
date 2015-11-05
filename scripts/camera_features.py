@@ -34,7 +34,6 @@ class CameraFeatures:
 			print 'writing dist image'
 			cv2.imwrite('bdist.jpg', di)
 			cv2.imwrite('extract.jpg', cv_image)
-			cv2.imwrite('extractconv.jpg', conv)
 
 			#cv2.imwrite('extract.jpg', cv_image)
 			#cv2.imwrite('extractconv.jpg', conv)
@@ -52,8 +51,10 @@ class CameraFeatures:
 		ssqImg = y + cr + cb
 		sqrtImg = np.sqrt(ssqImg)
 		dImg = sqrtImg.astype(np.uint8)
-		print np.min(sqrtImg), np.max(sqrtImg)
-		print np.min(dImg), np.max(dImg)
+		cv2.imwrite('y.jpg', y)
+		cv2.imwrite('cr.jpg', cr)
+		cv2.imwrite('cb.jpg', cb)
+
 		return dImg
 
 	
