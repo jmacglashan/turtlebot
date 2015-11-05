@@ -4,6 +4,8 @@ import rospy
 import cv2
 from sensor_msgs.msg import Image
 from cv_bridge import CvBridge, CvBridgeError
+import numpy as np
+import math
 
 class CameraFeatures:
 
@@ -26,10 +28,26 @@ class CameraFeatures:
 
 			conv = cv2.cvtColor(cv_image, cv2.COLOR_BGR2YCR_CB)
 
-			cv2.imwrite('extract.jpg', cv_image)
-			cv2.imwrite('extractconv.jpg', conv)
-			self.nPrints -= 1
-			print 'finished writing'
+			height, width, channels = img.shape
+			distImg = np.zeros((height,width,1), np.uint8)
+
+			tcb = trc = 128
+			for i in xrange(width):
+				for j in xrange(height):
+					dcr = conv[j,i,1] - tcr
+					dcr = dcr*dcr
+					dcb = conv[j,i,2] - tcb
+					dcb = dcb*dcb
+					dist = int(math.sqrt(dcr + dcb))
+					distImg[j,i 0] = dist
+
+			cv2.imwrite('targetCol.jpg', distImg)
+
+
+			#cv2.imwrite('extract.jpg', cv_image)
+			#cv2.imwrite('extractconv.jpg', conv)
+			#self.nPrints -= 1
+			#print 'finished writing'
 
 
 if __name__ == '__main__':
