@@ -35,7 +35,7 @@ class CameraFeatures:
 			cv2.imwrite('cr.jpg', cr)
 			cv2.imwrite('cb.jpg', cb)
 
-			di = self.distImage(conv, (100, 255, 64), (1,0,0))
+			di = self.distImage(conv, (0, 255, 64), (1,0,0))
 			print 'writing dist image'
 			cv2.imwrite('bdist.jpg', di)
 			cv2.imwrite('extract.jpg', cv_image)
