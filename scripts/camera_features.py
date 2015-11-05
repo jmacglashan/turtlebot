@@ -26,9 +26,12 @@ class CameraFeatures:
 			except CvBridge, e:
 				print e
 
+			print 'converring color space'
 			conv = cv2.cvtColor(cv_image, cv2.COLOR_BGR2YCR_CB)
+			print 'getting dist image'
 
-			di = self.distImage(conv, (-1, 128, 128))
+			di = self.distImage(conv, (100, 255, 64))
+			print 'writing dist image'
 			cv2.imwrite('bdist.jpg', di)
 
 			#cv2.imwrite('extract.jpg', cv_image)
@@ -51,7 +54,7 @@ class CameraFeatures:
 				if targetCol[i] >= 0:
 					d = targetCol[i] - col[i]
 					sum += d*d
-			dist = int(math.sqrt(sum))
+			dist = 255 - int(math.sqrt(sum))
 			return dist
 
 
