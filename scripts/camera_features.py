@@ -14,6 +14,7 @@ class CameraFeatures:
 		self.bridge = CvBridge()
 		rospy.init_node('camera_features', anonymous=True)
 		rospy.Subscriber('camera/rgb/image_color', Image, self.cameraCallback, queue_size=1)
+		self.image_pub = rospy.Publisher("distanceImage",Image)
 		
 		rospy.spin()
 		
@@ -26,29 +27,38 @@ class CameraFeatures:
 			except CvBridge, e:
 				print e
 
-			print 'converring color space'
+			#print 'converring color space'
 			conv = cv2.cvtColor(cv_image, cv2.COLOR_BGR2YCR_CB)
-			print 'getting dist image'
+			#print 'getting dist image'
 
-			cv2.imwrite('ycrcb.jpg', conv)
+			#cv2.imwrite('ycrcb.jpg', conv)
 
-			y, cr, cb = cv2.split(conv)
-			cv2.imwrite('y.jpg', y)
-			cv2.imwrite('cr.jpg', cr)
-			cv2.imwrite('cb.jpg', cb)
+			#y, cr, cb = cv2.split(conv)
+			#cv2.imwrite('y.jpg', y)
+			#cv2.imwrite('cr.jpg', cr)
+			#cv2.imwrite('cb.jpg', cb)
 
 			#107 187 81	
 			#di = self.distImage(conv, (0, 255, 64), (1,0,0))
 			di = self.distImage(conv, (107, 187, 81), (1,0,0))
-			print 'writing dist image'
-			cv2.imwrite('bdist.jpg', di)
-			cv2.imwrite('extract.jpg', cv_image)
+			
+			try:
+				self.image_pub.publish(self.bridge.cv2_to_imgmsg(di, "rgb8"))
+			except CvBridgeError, e:
+				print e
+
+
+
+
+			#print 'writing dist image'
+			#cv2.imwrite('bdist.jpg', di)
+			#cv2.imwrite('extract.jpg', cv_image)
 
 			#cv2.imwrite('extract.jpg', cv_image)
 			#cv2.imwrite('extractconv.jpg', conv)
 			
 			self.nPrints -= 1
-			print 'finished writing'
+			#print 'finished writing'
 
 	def distImage(self, img, targetCol, mask=(0, 0, 0)):
 		
@@ -74,6 +84,7 @@ class CameraFeatures:
 		normed = 1. - (sqrtImg / 255)
 		sqNormed = np.square(normed)
 		dImg = np.clip(255 * sqNormed, 0, 255).astype(np.uint8)
+		dImg = cv2.cvtColor(dImg, cv2.COLOR_GRAYTORGB)
 		
 
 		return dImg
