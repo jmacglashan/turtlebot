@@ -54,7 +54,7 @@ class CameraFeatures:
 		
 		try:
 			cdi = cv2.cvtColor(di, cv2.COLOR_GRAY2RGB)
-			sf = cv2.resize(features, (500, 500))
+			sf = cv2.cvtColor(cv2.resize(features, (500, 500)), cv2.COLOR_GRAY2RGB)
 			self.image_pub.publish(self.bridge.cv2_to_imgmsg(cdi, "rgb8"))
 			self.f_pub.publish(self.bridge.cv2_to_imgmsg(sf, "rgb8"))
 		except CvBridgeError, e:
@@ -111,7 +111,6 @@ class CameraFeatures:
 				features[r,c,0] = mean - response
 		features = np.clip(features, 0, 255).astype(np.uint8)
 		return features
-
 
 
 
