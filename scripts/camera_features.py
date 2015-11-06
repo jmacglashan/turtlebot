@@ -103,7 +103,7 @@ class CameraFeatures:
 
 
 	def computeWindowResponse(self, img, factor, response):
-		features = np.zeros((height,width,1), np.int8)
+		features = np.zeros((factor,factor,1), np.int8)
 		for r in xrange(factor):
 			for c in xrange(factor):
 				wimg = self.extractWindow(r, c, img, factor)
