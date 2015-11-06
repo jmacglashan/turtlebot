@@ -41,8 +41,8 @@ class CameraFeatures:
 		#cv2.imwrite('cb.jpg', cb)
 
 		#107 187 81	
-		targetCol = rospy.get_param('tColor', [107, 187, 81])
-		mask = rospy.get_param('tMask', [1, 0, 0])
+		targetCol = rospy.get_param('turtle_env/camera_features/tColor', [107, 187, 81])
+		mask = rospy.get_param('turtle_env/camera_features/tMask', [1, 0, 0])
 
 		#di = self.distImage(conv, (0, 255, 64), (1,0,0))
 		di = self.distImage(conv, targetCol, mask)
