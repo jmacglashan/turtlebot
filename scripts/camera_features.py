@@ -54,7 +54,7 @@ class CameraFeatures:
 		
 		img = cv2.GaussianBlur(img, (5,5), 2)
 
-		targetCol = [0 if mask[i] == 1 else target[i] for i in xrange(len(targetCol))]
+		targetCol = [0 if mask[i] == 1 else targetCol[i] for i in xrange(len(targetCol))]
 
 		if mask[0] == 1:
 			img[:,:,0] = 0
