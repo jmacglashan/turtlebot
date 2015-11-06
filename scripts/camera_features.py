@@ -54,7 +54,7 @@ class CameraFeatures:
 		
 		try:
 			cdi = cv2.cvtColor(di, cv2.COLOR_GRAY2RGB)
-			sf = cv.resize(features, (500, 500))
+			sf = cv2.resize(features, (500, 500))
 			self.image_pub.publish(self.bridge.cv2_to_imgmsg(cdi, "rgb8"))
 			self.f_pub.publish(self.bridge.cv2_to_imgmsg(sf, "rgb8"))
 		except CvBridgeError, e:
