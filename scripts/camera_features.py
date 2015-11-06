@@ -14,7 +14,9 @@ class CameraFeatures:
 		self.bridge = CvBridge()
 		rospy.init_node('camera_features', anonymous=True)
 		rospy.Subscriber('camera/rgb/image_color', Image, self.cameraCallback, queue_size=1)
-		self.image_pub = rospy.Publisher("distanceImage",Image)
+		self.image_pub = rospy.Publisher("turtle_env/camera_features/distanceImage",Image)
+		self.f_pub = rospy.Publisher("turtle_env/camera_features/features",Image)
+
 		
 		rospy.spin()
 		
@@ -41,14 +43,20 @@ class CameraFeatures:
 		#cv2.imwrite('cb.jpg', cb)
 
 		#107 187 81	
-		targetCol = rospy.get_param('turtle_env/camera_features/tColor', [107, 187, 81])
+		targetCol = rospy.get_param('turtle_env/camera_features/tColor', [107, 255, 200])
 		mask = rospy.get_param('turtle_env/camera_features/tMask', [1, 0, 0])
+		response = rospy.get_param('turtle_env/camera_features/response', 30)
 
 		#di = self.distImage(conv, (0, 255, 64), (1,0,0))
 		di = self.distImage(conv, targetCol, mask)
+
+		features = self.computeWindowResponse(di, 8, response)
 		
 		try:
-			self.image_pub.publish(self.bridge.cv2_to_imgmsg(di, "rgb8"))
+			cdi = cv2.cvtColor(di, cv2.COLOR_GRAY2RGB)
+			sf = cv.resize(features, (500, 500))
+			self.image_pub.publish(self.bridge.cv2_to_imgmsg(cdi, "rgb8"))
+			self.f_pub.publish(self.bridge.cv2_to_imgmsg(sf, "rgb8"))
 		except CvBridgeError, e:
 			print e
 
@@ -89,10 +97,40 @@ class CameraFeatures:
 		normed = 1. - (sqrtImg / 255)
 		sqNormed = np.square(normed)
 		dImg = np.clip(255 * sqNormed, 0, 255).astype(np.uint8)
-		dImg = cv2.cvtColor(dImg, cv2.COLOR_GRAY2RGB)
 		
 
 		return dImg
+
+
+	def computeWindowResponse(self, img, factor, response):
+		features = np.zeros((height,width,1), np.int8)
+		for r in xrange(factor):
+			for c in xrange(factor):
+				wimg = self.extractWindow(r, c, img, factor)
+				mean = np.mean(wimg)
+				features[r,c,0] = mean - response
+		features = np.clip(features, 0, 255).astype(np.uint8)
+		return features
+
+
+
+
+	def extractWindow(self, r, c, img, factor):
+		height, width, channels = img.shape
+		wh = height / factor
+		ww = width / factor
+
+		spy = wh*r
+		spx = ww*c
+
+		epy = spy + wh
+		epx = spx + ww
+
+		window = img[spy:epy, spx:epx]
+
+		return window
+
+
 
 	
 
