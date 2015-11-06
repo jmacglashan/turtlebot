@@ -9,7 +9,7 @@ import numpy as np
 import math
 
 
-class CameraFeatures:
+class CameraFeaturesDriver:
 
 	def __init__(self):
 		self.nPrints = 1
@@ -125,4 +125,4 @@ class CameraFeatures:
 
 
 if __name__ == '__main__':
-	CameraFeatures()
+	CameraFeaturesDriver()
