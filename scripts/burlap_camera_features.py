@@ -3,9 +3,11 @@
 import rospy
 import cv2
 from sensor_msgs.msg import Image
+from turtle_env.msg import CameraFeatures
 from cv_bridge import CvBridge, CvBridgeError
 import numpy as np
 import math
+
 
 class CameraFeatures:
 
@@ -14,8 +16,8 @@ class CameraFeatures:
 		self.bridge = CvBridge()
 		rospy.init_node('camera_features', anonymous=True)
 		rospy.Subscriber('camera/rgb/image_color', Image, self.cameraCallback, queue_size=1)
-		self.image_pub = rospy.Publisher("turtle_env/camera_features/distanceImage",Image)
-		self.f_pub = rospy.Publisher("turtle_env/camera_features/features",Image)
+		self.features_pub = rospy.Publisher("turtle_env/camera_features/features",CameraFeatures)
+	
 
 		
 		rospy.spin()
@@ -51,27 +53,11 @@ class CameraFeatures:
 		di = self.distImage(conv, targetCol, mask)
 
 		features = self.computeWindowResponse(di, 8, response[0], response[1], response[2])
-		
-		try:
-			cdi = cv2.cvtColor(di, cv2.COLOR_GRAY2RGB)
-			sf = cv2.cvtColor(cv2.resize(features, (500, 500)), cv2.COLOR_GRAY2RGB)
-			self.image_pub.publish(self.bridge.cv2_to_imgmsg(cdi, "rgb8"))
-			self.f_pub.publish(self.bridge.cv2_to_imgmsg(sf, "rgb8"))
-		except CvBridgeError, e:
-			print e
 
+		topicMessage = CameraFeatures()
+		topicMessage.features = features.flatten()
+		self.features_pub.publish(topicMessage)
 
-
-
-		#print 'writing dist image'
-		#cv2.imwrite('bdist.jpg', di)
-		#cv2.imwrite('extract.jpg', cv_image)
-
-		#cv2.imwrite('extract.jpg', cv_image)
-		#cv2.imwrite('extractconv.jpg', conv)
-		
-		
-		#print 'finished writing'
 
 	def distImage(self, img, targetCol, mask=(0, 0, 0)):
 		
