@@ -23,7 +23,7 @@ class CameraFeatures:
 		if self.nPrints > 0:
 			print 'getting callback'
 			self.nPrints -= 1
-		
+
 		try:
 			cv_image = self.bridge.imgmsg_to_cv2(data, 'bgr8')
 		except CvBridge, e:
@@ -41,8 +41,11 @@ class CameraFeatures:
 		#cv2.imwrite('cb.jpg', cb)
 
 		#107 187 81	
+		targetCol = rospy.get_param('tColor', [107, 187, 81])
+		mask = rospy.get_param('tMask', [1, 0, 0])
+
 		#di = self.distImage(conv, (0, 255, 64), (1,0,0))
-		di = self.distImage(conv, (107, 187, 81), (1,0,0))
+		di = self.distImage(conv, targetCol, mask)
 		
 		try:
 			self.image_pub.publish(self.bridge.cv2_to_imgmsg(di, "rgb8"))
