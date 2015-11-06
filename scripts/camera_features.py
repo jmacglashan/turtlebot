@@ -103,14 +103,18 @@ class CameraFeatures:
 
 
 	def computeWindowResponse(self, img, factor, response):
+		maxMean = 0.
 		features = np.zeros((factor,factor,1), np.int)
 		for r in xrange(factor):
 			for c in xrange(factor):
 				wimg = self.extractWindow(r, c, img, factor)
 				mean = np.mean(wimg)
+				maxMean = math.max(mean)
 				features[r,c,0] = mean - response
 		features = np.clip(features, 0, 255).astype(np.uint8)
+		print maxMean
 		return features
+
 
 
 
