@@ -47,6 +47,9 @@ class CameraFeatures:
 			print 'finished writing'
 
 	def distImage(self, img, targetCol, mask=(0, 0, 0)):
+		
+		img = cv2.GaussianBlur(img, (5,5), 1)
+
 		if mask[0] == 1:
 			img[:,:,0] = 0
 		if mask[1] == 1:
