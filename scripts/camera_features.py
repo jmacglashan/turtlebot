@@ -103,7 +103,7 @@ class CameraFeatures:
 
 
 	def computeWindowResponse(self, img, factor, threshold, response, cap):
-		ret, img = cvs.threshold(img, threshold, 255, cv2.THRESH_TOZERO)
+		ret, img = cv2.threshold(img, threshold, 255, cv2.THRESH_TOZERO)
 		features = np.zeros((factor,factor,1), np.int)
 		for r in xrange(factor):
 			for c in xrange(factor):
