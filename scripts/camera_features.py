@@ -65,7 +65,9 @@ class CameraFeatures:
 		y, cr, cb = cv2.split(sqImg)
 		ssqImg = y + cr + cb
 		sqrtImg = np.sqrt(ssqImg)
-		dImg = 255 - sqrtImg.astype(np.uint8)
+		normed = 1. - (sqrtImg / 255)
+		sqNormed = np.square(normed)
+		dImg = np.clip(255 * square, 0, 255).astype(np.uint8)
 		
 
 		return dImg
