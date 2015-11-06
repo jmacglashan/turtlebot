@@ -22,43 +22,45 @@ class CameraFeatures:
 	def cameraCallback(self, data):
 		if self.nPrints > 0:
 			print 'getting callback'
-			try:
-				cv_image = self.bridge.imgmsg_to_cv2(data, 'bgr8')
-			except CvBridge, e:
-				print e
-
-			#print 'converring color space'
-			conv = cv2.cvtColor(cv_image, cv2.COLOR_BGR2YCR_CB)
-			#print 'getting dist image'
-
-			#cv2.imwrite('ycrcb.jpg', conv)
-
-			#y, cr, cb = cv2.split(conv)
-			#cv2.imwrite('y.jpg', y)
-			#cv2.imwrite('cr.jpg', cr)
-			#cv2.imwrite('cb.jpg', cb)
-
-			#107 187 81	
-			#di = self.distImage(conv, (0, 255, 64), (1,0,0))
-			di = self.distImage(conv, (107, 187, 81), (1,0,0))
-			
-			try:
-				self.image_pub.publish(self.bridge.cv2_to_imgmsg(di, "rgb8"))
-			except CvBridgeError, e:
-				print e
-
-
-
-
-			#print 'writing dist image'
-			#cv2.imwrite('bdist.jpg', di)
-			#cv2.imwrite('extract.jpg', cv_image)
-
-			#cv2.imwrite('extract.jpg', cv_image)
-			#cv2.imwrite('extractconv.jpg', conv)
-			
 			self.nPrints -= 1
-			#print 'finished writing'
+		
+		try:
+			cv_image = self.bridge.imgmsg_to_cv2(data, 'bgr8')
+		except CvBridge, e:
+			print e
+
+		#print 'converring color space'
+		conv = cv2.cvtColor(cv_image, cv2.COLOR_BGR2YCR_CB)
+		#print 'getting dist image'
+
+		#cv2.imwrite('ycrcb.jpg', conv)
+
+		#y, cr, cb = cv2.split(conv)
+		#cv2.imwrite('y.jpg', y)
+		#cv2.imwrite('cr.jpg', cr)
+		#cv2.imwrite('cb.jpg', cb)
+
+		#107 187 81	
+		#di = self.distImage(conv, (0, 255, 64), (1,0,0))
+		di = self.distImage(conv, (107, 187, 81), (1,0,0))
+		
+		try:
+			self.image_pub.publish(self.bridge.cv2_to_imgmsg(di, "rgb8"))
+		except CvBridgeError, e:
+			print e
+
+
+
+
+		#print 'writing dist image'
+		#cv2.imwrite('bdist.jpg', di)
+		#cv2.imwrite('extract.jpg', cv_image)
+
+		#cv2.imwrite('extract.jpg', cv_image)
+		#cv2.imwrite('extractconv.jpg', conv)
+		
+		
+		#print 'finished writing'
 
 	def distImage(self, img, targetCol, mask=(0, 0, 0)):
 		
