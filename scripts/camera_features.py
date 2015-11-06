@@ -84,7 +84,7 @@ class CameraFeatures:
 		normed = 1. - (sqrtImg / 255)
 		sqNormed = np.square(normed)
 		dImg = np.clip(255 * sqNormed, 0, 255).astype(np.uint8)
-		dImg = cv2.cvtColor(dImg, cv2.COLOR_GRAYTORGB)
+		dImg = cv2.cvtColor(dImg, cv2.COLOR_GRAY2RGB)
 		
 
 		return dImg
