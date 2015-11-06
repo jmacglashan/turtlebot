@@ -67,7 +67,7 @@ class CameraFeatures:
 		sqrtImg = np.sqrt(ssqImg)
 		normed = 1. - (sqrtImg / 255)
 		sqNormed = np.square(normed)
-		dImg = np.clip(255 * square, 0, 255).astype(np.uint8)
+		dImg = np.clip(255 * sqNormed, 0, 255).astype(np.uint8)
 		
 
 		return dImg
