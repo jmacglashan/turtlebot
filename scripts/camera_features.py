@@ -48,7 +48,7 @@ class CameraFeatures:
 
 	def distImage(self, img, targetCol, mask=(0, 0, 0)):
 		
-		img = cv2.GaussianBlur(img, (5,5), 1)
+		img = cv2.GaussianBlur(img, (5,5), 2)
 
 		if mask[0] == 1:
 			img[:,:,0] = 0
