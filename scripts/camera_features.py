@@ -116,10 +116,7 @@ class CameraFeatures:
 
 
 	def extractWindow(self, r, c, img, factor):
-		try:
-			height, width, channels = img.shape
-		except:
-			print img.shape
+		height, width = img.shape
 		wh = height / factor
 		ww = width / factor
 
