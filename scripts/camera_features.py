@@ -45,12 +45,12 @@ class CameraFeatures:
 		#107 187 81	
 		targetCol = rospy.get_param('turtle_env/camera_features/tColor', [107, 255, 200])
 		mask = rospy.get_param('turtle_env/camera_features/tMask', [1, 0, 0])
-		response = rospy.get_param('turtle_env/camera_features/response', 30)
+		response = rospy.get_param('turtle_env/camera_features/response', [127, 0.1, 0.3])
 
 		#di = self.distImage(conv, (0, 255, 64), (1,0,0))
 		di = self.distImage(conv, targetCol, mask)
 
-		features = self.computeWindowResponse(di, 8, response)
+		features = self.computeWindowResponse(di, 8, response[0], response[1], response[2])
 		
 		try:
 			cdi = cv2.cvtColor(di, cv2.COLOR_GRAY2RGB)
@@ -102,17 +102,16 @@ class CameraFeatures:
 		return dImg
 
 
-	def computeWindowResponse(self, img, factor, response):
-		maxMean = 0.
+	def computeWindowResponse(self, img, factor, threshold, response, cap):
+		ret, img = cvs.threshold(img, threshold, 255, cv2.THRESH_TOZERO)
 		features = np.zeros((factor,factor,1), np.int)
 		for r in xrange(factor):
 			for c in xrange(factor):
 				wimg = self.extractWindow(r, c, img, factor)
-				mean = np.mean(wimg)
-				maxMean = max(mean, maxMean)
-				features[r,c,0] = mean - response
+				numOn = np.mean(wimg) / 255. #fraction of on
+				fVal = ((numOn - response) / (cap - response)) * 255
+				features[r,c,0] = fVal
 		features = np.clip(features, 0, 255).astype(np.uint8)
-		print maxMean
 		return features
 
 
