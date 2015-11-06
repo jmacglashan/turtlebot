@@ -30,6 +30,8 @@ class CameraFeatures:
 			conv = cv2.cvtColor(cv_image, cv2.COLOR_BGR2YCR_CB)
 			print 'getting dist image'
 
+			cv2.imwrite('ycrcb.jpg', conv)
+
 			y, cr, cb = cv2.split(conv)
 			cv2.imwrite('y.jpg', y)
 			cv2.imwrite('cr.jpg', cr)
