@@ -28,10 +28,16 @@ class CameraFeaturesDriver:
 			print 'getting callback'
 			self.nPrints -= 1
 
+
 		try:
 			cv_image = self.bridge.imgmsg_to_cv2(data, 'bgr8')
 		except CvBridge, e:
 			print e
+
+
+
+		#first rescale
+		cv_image = cv2.resize(cv_image, (120,160))
 
 		#print 'converring color space'
 		conv = cv2.cvtColor(cv_image, cv2.COLOR_BGR2YCR_CB)
@@ -61,7 +67,7 @@ class CameraFeaturesDriver:
 
 	def distImage(self, img, targetCol, mask=(0, 0, 0)):
 		
-		img = cv2.GaussianBlur(img, (5,5), 2)
+		#img = cv2.GaussianBlur(img, (5,5), 2)
 
 		targetCol = [0 if mask[i] == 1 else targetCol[i] for i in xrange(len(targetCol))]
 
