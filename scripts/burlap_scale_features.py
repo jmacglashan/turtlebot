@@ -120,7 +120,7 @@ class CameraFeaturesDriver:
 				wimg = self.extractWindow(r, c, img, factor)
 				numOn = np.mean(wimg) / 255. #fraction of on
 				for i in xrange(len(scales)):
-					response, cap = response[i]
+					response, cap = responseParams[i]
 					fVal = ((numOn - response) / (cap - response)) * 255
 					scales[i][r,c,0] = fVal
 
