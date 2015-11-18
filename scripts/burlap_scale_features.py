@@ -112,7 +112,7 @@ class CameraFeaturesDriver:
 
 		scales = []
 		for i in xrange(len(responseParams)):
-			scales[i] = np.zeros((factor,factor,1), np.int)
+			scales.append(np.zeros((factor,factor,1), np.int))
 
 		ret, img = cv2.threshold(img, threshold, 255, cv2.THRESH_TOZERO)
 		for r in xrange(factor):
