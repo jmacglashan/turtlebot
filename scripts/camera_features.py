@@ -45,6 +45,7 @@ class CameraFeatures:
 
 		#107 187 81	
 		targetCol = rospy.get_param('turtle_env/camera_features/dist_color', [107, 255, 200])
+		mask = rospy.get_param('turtle_env/camera_features/dist_mask', [1, 0, 0])
 
 		#di = self.distImage(conv, (0, 255, 64), (1,0,0))
 		di = self.distImage(conv, targetCol, mask)
