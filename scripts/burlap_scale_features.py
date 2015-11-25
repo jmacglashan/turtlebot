@@ -55,8 +55,8 @@ class CameraFeaturesDriver:
 		targetCol = rospy.get_param('turtle_env/camera_features/tColor', [107, 255, 200])
 		mask = rospy.get_param('turtle_env/camera_features/tMask', [1, 0, 0])
 		threshold = rospy.get_param('turtle_env/camera_features/threshold', 80)
-		response_near = rospy.get_param('turtle_env/camera_features/response_near', [0.13, 0.2])
-		response_mid = rospy.get_param('turtle_env/camera_features/response_mid', [0.03, 0.05])
+		response_near = rospy.get_param('turtle_env/camera_features/response_near', [0.1, 0.15])
+		response_mid = rospy.get_param('turtle_env/camera_features/response_mid', [0.01, 0.03])
 		response_far = rospy.get_param('turtle_env/camera_features/response_far', [0.0015, 0.003])
 
 		responseParams = (response_near, response_mid, response_far)
