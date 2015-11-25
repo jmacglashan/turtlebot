@@ -38,7 +38,7 @@ class CameraFeaturesDriver:
 
 
 		#first rescale
-		cv_image = cv2.resize(cv_image, (120,160))
+		cv_image = cv2.resize(cv_image, (160,120))
 
 		#print 'converring color space'
 		conv = cv2.cvtColor(cv_image, cv2.COLOR_BGR2YCR_CB)
