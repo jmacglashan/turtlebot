@@ -15,7 +15,6 @@ class CameraFeatures:
 		rospy.init_node('camera_features', anonymous=True)
 		rospy.Subscriber('camera/rgb/image_color', Image, self.cameraCallback, queue_size=1)
 		self.image_pub = rospy.Publisher("turtle_env/camera_features/distance_image",Image)
-		self.f_pub = rospy.Publisher("turtle_env/camera_features/features_image",Image)
 
 		
 		rospy.spin()
@@ -31,6 +30,8 @@ class CameraFeatures:
 		except CvBridge, e:
 			print e
 
+		cv_image = cv2.resize(cv_image, (120,160))
+
 		#print 'converring color space'
 		conv = cv2.cvtColor(cv_image, cv2.COLOR_BGR2YCR_CB)
 		#print 'getting dist image'
@@ -43,20 +44,15 @@ class CameraFeatures:
 		#cv2.imwrite('cb.jpg', cb)
 
 		#107 187 81	
-		targetCol = rospy.get_param('turtle_env/camera_features/tColor', [107, 255, 200])
-		mask = rospy.get_param('turtle_env/camera_features/tMask', [1, 0, 0])
-		response = rospy.get_param('turtle_env/camera_features/response', [80, 0.03, 0.05])
+		targetCol = rospy.get_param('turtle_env/camera_features/dist_color', [107, 255, 200])
 
 		#di = self.distImage(conv, (0, 255, 64), (1,0,0))
 		di = self.distImage(conv, targetCol, mask)
 
-		features = self.computeWindowResponse(di, 8, response[0], response[1], response[2])
 		
 		try:
 			cdi = cv2.cvtColor(di, cv2.COLOR_GRAY2RGB)
-			sf = cv2.cvtColor(cv2.resize(features, (500, 500)), cv2.COLOR_GRAY2RGB)
 			self.image_pub.publish(self.bridge.cv2_to_imgmsg(cdi, "rgb8"))
-			self.f_pub.publish(self.bridge.cv2_to_imgmsg(sf, "rgb8"))
 		except CvBridgeError, e:
 			print e
 
@@ -75,7 +71,7 @@ class CameraFeatures:
 
 	def distImage(self, img, targetCol, mask=(0, 0, 0)):
 		
-		img = cv2.GaussianBlur(img, (5,5), 2)
+		#img = cv2.GaussianBlur(img, (5,5), 2)
 
 		targetCol = [0 if mask[i] == 1 else targetCol[i] for i in xrange(len(targetCol))]
 
@@ -101,36 +97,6 @@ class CameraFeatures:
 
 		return dImg
 
-
-	def computeWindowResponse(self, img, factor, threshold, response, cap):
-		ret, img = cv2.threshold(img, threshold, 255, cv2.THRESH_TOZERO)
-		features = np.zeros((factor,factor,1), np.int)
-		for r in xrange(factor):
-			for c in xrange(factor):
-				wimg = self.extractWindow(r, c, img, factor)
-				numOn = np.mean(wimg) / 255. #fraction of on
-				fVal = ((numOn - response) / (cap - response)) * 255
-				features[r,c,0] = fVal
-		features = np.clip(features, 0, 255).astype(np.uint8)
-		return features
-
-
-
-
-	def extractWindow(self, r, c, img, factor):
-		height, width = img.shape
-		wh = height / factor
-		ww = width / factor
-
-		spy = wh*r
-		spx = ww*c
-
-		epy = spy + wh
-		epx = spx + ww
-
-		window = img[spy:epy, spx:epx]
-
-		return window
 
 
 
