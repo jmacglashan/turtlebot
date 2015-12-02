@@ -1,0 +1,1 @@
+CameraFeatures[] scales

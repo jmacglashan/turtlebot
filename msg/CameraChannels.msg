@@ -1,0 +1,1 @@
+CameraScaleFeatures[] channels
