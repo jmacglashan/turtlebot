@@ -40,12 +40,12 @@ class CameraFeaturesDriver:
 		conv = cv2.cvtColor(cv_image, cv2.COLOR_BGR2YCR_CB)
 
 		#get parameters
-		targetCols = rospy.get_param('turtle_env/camera_features/tColor', [[107, 255, 200], [200, 192, 70]])
-		masks = rospy.get_param('turtle_env/camera_features/tMask', [[1, 0, 0], [1, 0, 0]])
-		thresholds = rospy.get_param('turtle_env/camera_features/threshold', [80, 200])
-		response_nears = rospy.get_param('turtle_env/camera_features/response_near', [[0.1, 0.15], [0.65, 0.8]])
-		response_mids = rospy.get_param('turtle_env/camera_features/response_mid', [[0.01, 0.03], [0.1, 0.2]])
-		response_fars = rospy.get_param('turtle_env/camera_features/response_far', [[0.0015, 0.003], [0.0015, 0.003]])
+		targetCols = rospy.get_param('turtle_env/camera_features/tColors', [[107, 255, 200], [200, 192, 70]])
+		masks = rospy.get_param('turtle_env/camera_features/tMasks', [[1, 0, 0], [1, 0, 0]])
+		thresholds = rospy.get_param('turtle_env/camera_features/thresholds', [80, 200])
+		response_nears = rospy.get_param('turtle_env/camera_features/response_nears', [[0.1, 0.15], [0.65, 0.8]])
+		response_mids = rospy.get_param('turtle_env/camera_features/response_mids', [[0.01, 0.03], [0.1, 0.2]])
+		response_fars = rospy.get_param('turtle_env/camera_features/response_fars', [[0.0015, 0.003], [0.0015, 0.003]])
 
 		#set max channels to the min specification for all parameters
 		mxChannels = len(targetCols)
