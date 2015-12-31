@@ -62,7 +62,7 @@ class CameraFeaturesDriver:
 			responseParams = (response_nears[i], response_mids[i], response_fars[i])
 			di = self.distImage(conv, targetCols[i], masks[i])
 
-			scales = self.computeWindowResponse(di, 8, threshold, responseParams)
+			scales = self.computeWindowResponse(di, 8, thresholds[i], responseParams)
 
 			nCF = CameraFeatures()
 			nCF.features = scales[0].flatten()
