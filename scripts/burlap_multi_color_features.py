@@ -46,6 +46,8 @@ class CameraFeaturesDriver:
 		response_nears = rospy.get_param('turtle_env/camera_features/response_nears', [[0.1, 0.15], [0.65, 0.8]])
 		response_mids = rospy.get_param('turtle_env/camera_features/response_mids', [[0.01, 0.03], [0.1, 0.2]])
 		response_fars = rospy.get_param('turtle_env/camera_features/response_fars', [[0.0015, 0.003], [0.0015, 0.003]])
+		pads = rospy.get_param('turtle_env/camera_features/window_pads', [0, 0])
+
 
 		#set max channels to the min specification for all parameters
 		mxChannels = len(targetCols)
@@ -62,7 +64,7 @@ class CameraFeaturesDriver:
 			responseParams = (response_nears[i], response_mids[i], response_fars[i])
 			di = self.distImage(conv, targetCols[i], masks[i])
 
-			scales = self.computeWindowResponse(di, 8, thresholds[i], responseParams)
+			scales = self.computeWindowRespon=se(di, 8, thresholds[i], responseParams, pads[i])
 
 			nCF = CameraFeatures()
 			nCF.features = scales[0].flatten()
@@ -109,7 +111,7 @@ class CameraFeaturesDriver:
 		return dImg
 
 
-	def computeWindowResponse(self, img, factor, threshold, responseParams):
+	def computeWindowResponse(self, img, factor, threshold, responseParams, pad=0):
 
 		scales = []
 		for i in xrange(len(responseParams)):
@@ -118,7 +120,7 @@ class CameraFeaturesDriver:
 		ret, img = cv2.threshold(img, threshold, 255, cv2.THRESH_TOZERO)
 		for r in xrange(factor):
 			for c in xrange(factor):
-				wimg = self.extractWindow(r, c, img, factor)
+				wimg = self.extractWindow(r, c, img, factor, pad)
 				numOn = np.mean(wimg) / 255. #fraction of on
 				for i in xrange(len(scales)):
 					response, cap = responseParams[i]
@@ -133,16 +135,22 @@ class CameraFeaturesDriver:
 
 
 
-	def extractWindow(self, r, c, img, factor):
+	def extractWindow(self, r, c, img, factor, pad=0):
 		height, width = img.shape
 		wh = height / factor
 		ww = width / factor
 
-		spy = wh*r
-		spx = ww*c
+		spy = wh*r - pad
+		spx = ww*c - pad
 
-		epy = spy + wh
-		epx = spx + ww
+		epy = spy + wh + pad
+		epx = spx + ww + pad
+
+		spy = max(0, spy)
+		spx = max(0, spx)
+
+		epy = min(height, epy)
+		epx = min(width, epx)
 
 		window = img[spy:epy, spx:epx]
 
