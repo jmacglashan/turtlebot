@@ -21,7 +21,9 @@ class CameraFeaturesDriver:
 		rospy.init_node('camera_channel_features', anonymous=True)
 		rospy.Subscriber('camera/rgb/image_color', Image, self.cameraCallback, queue_size=1)
 		self.features_pub = rospy.Publisher("turtle_env/camera_features/channel_features",CameraChannels)
-	
+		self.image_pub = rospy.Publisher("turtle_env/camera_features/distance_image",Image)
+
+
 		rospy.spin()
 		
 
@@ -66,6 +68,14 @@ class CameraFeaturesDriver:
 		for i in xrange(mxChannels):
 			responseParams = (response_nears[i], response_mids[i], response_fars[i])
 			di = self.distImage(conv, targetCols[i], masks[i])
+
+			if i == 0:
+				try:
+					cdi = cv2.cvtColor(di, cv2.COLOR_GRAY2RGB)
+					self.image_pub.publish(self.bridge.cv2_to_imgmsg(cdi, "rgb8"))
+				except CvBridgeError, e:
+					print e
+
 
 			scales = self.computeWindowResponse(di, 8, thresholds[i], responseParams, pads[i])
 
