@@ -9,6 +9,7 @@ from turtle_env.msg import CameraChannels
 from cv_bridge import CvBridge, CvBridgeError
 import numpy as np
 import math
+import time
 
 
 class CameraFeaturesDriver:
@@ -28,6 +29,8 @@ class CameraFeaturesDriver:
 		if self.nPrints > 0:
 			print 'getting callback'
 			self.nPrints -= 1
+
+		stime = time.time()
 
 		try:
 			cv_image = self.bridge.imgmsg_to_cv2(data, 'bgr8')
@@ -80,6 +83,9 @@ class CameraFeaturesDriver:
 
 		self.features_pub.publish(camera_channel_features)
 
+		etime = time.time()
+		procTime = etime - stime
+		print 'time:', procTime
 
 
 	def distImage(self, img, targetCol, mask=(0, 0, 0)):
