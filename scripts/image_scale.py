@@ -34,7 +34,7 @@ class ImageScale:
 
         cv_image = cv2.resize(cv_image, (160, 120))
         try:
-            self.image_pub.publish(self.bridge.cv2_to_imgmsg(cdi, "rgb8"))
+            self.image_pub.publish(self.bridge.cv2_to_imgmsg(cv_image, "rgb8"))
         except CvBridgeError, e:
             print e
 
