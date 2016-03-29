@@ -20,6 +20,8 @@ class ImageScale:
         rospy.Subscriber('camera/rgb/image_color', Image, self.cameraCallback, queue_size=1)
         self.image_pub = rospy.Publisher("turtle_env/camera_scaled", Image)
 
+        rospy.spin()
+
     def cameraCallback(self, data):
         if self.nPrints > 0:
             print 'getting callback'
@@ -35,5 +37,9 @@ class ImageScale:
             self.image_pub.publish(self.bridge.cv2_to_imgmsg(cdi, "rgb8"))
         except CvBridgeError, e:
             print e
+
+
+if __name__ == '__main__':
+    ImageScale()
 
 
