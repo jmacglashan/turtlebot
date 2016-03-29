@@ -43,7 +43,7 @@ class ImageScale:
 
 
 if __name__ == '__main__':
-    if len(sys.argv) != 2:
+    if len(sys.argv) != 3:
         ImageScale()
     else:
         ImageScale(width=int(sys.argv[1]), height=int(sys.argv[2]))
