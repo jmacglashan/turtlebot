@@ -10,10 +10,13 @@ from cv_bridge import CvBridge, CvBridgeError
 import numpy as np
 import math
 import time
+import sys
 
 class ImageScale:
 
-    def __init__(self):
+    def __init__(self, width=160, height=120):
+        self.width = width
+        self.height = height
         self.nPrints = 1
         self.bridge = CvBridge()
         rospy.init_node('camera_scaled', anonymous=True)
@@ -32,7 +35,7 @@ class ImageScale:
         except CvBridge, e:
             print e
 
-        cv_image = cv2.resize(cv_image, (160, 120))
+        cv_image = cv2.resize(cv_image, (self.width, self.height))
         try:
             self.image_pub.publish(self.bridge.cv2_to_imgmsg(cv_image, "rgb8"))
         except CvBridgeError, e:
@@ -40,6 +43,9 @@ class ImageScale:
 
 
 if __name__ == '__main__':
-    ImageScale()
+    if len(sys.argv) != 2:
+        ImageScale()
+    else:
+        ImageScale(width=int(sys.argv[1]), height=int(sys.argv[2]))
 
 
