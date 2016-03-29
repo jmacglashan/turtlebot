@@ -28,7 +28,7 @@ class ImageScale:
             self.nPrints -= 1
 
         try:
-            cv_image = self.bridge.imgmsg_to_cv2(data, 'bgr8')
+            cv_image = self.bridge.imgmsg_to_cv2(data, 'rgb8')
         except CvBridge, e:
             print e
 
